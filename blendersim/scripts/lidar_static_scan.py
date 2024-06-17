@@ -71,10 +71,10 @@ def save_camera_properties_to_csv(camera_name, file_path):
         json.dump(matrix_data, f)
 
 camera_name = "Camera"
-file_name = "chair1"
+file_name = "view3"
 file_path = "C:/Programming/Fourth Semester/PointVIS/PointVIS/assets/output"
 
-save_camera_properties_to_csv(camera_name, file_path + "/camera1.csv")
+save_camera_properties_to_csv(camera_name, file_path + "/camera3.csv")
 
 range_scanner.ui.user_interface.scan_static(
     bpy.context, 
