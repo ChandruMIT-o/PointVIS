@@ -83,7 +83,6 @@ def my_save_handler(dummy):
                 count += 1
         return count
 
-
     myid = count_lines_csv(filename)
 
     camera_name = "Camera"
@@ -107,7 +106,7 @@ def my_save_handler(dummy):
 
         simulateRain=False, rainfallRate=0.0, 
 
-        addMesh=False,
+        addMesh=True,
 
         exportLAS=False, exportHDF=False, exportCSV=True, exportPLY=False, exportSingleFrames=False,
         exportRenderedImage=True, exportSegmentedImage=True, exportPascalVoc=False, exportDepthmap=False, depthMinDistance=0.0, depthMaxDistance=100.0, 
