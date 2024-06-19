@@ -1,6 +1,6 @@
 import pandas as pd
 
-csv_file = 'lookup_table.csv'
+csv_file = 'data_repository/lookup_table.csv'
 
 def initialise_lookup_table():
     df = pd.DataFrame(columns=['objectID', 'instanceID', 'class_name', 'x_centroid', 'y_centroid', 'z_centroid', 'volume', 'surface_area', 'file_path'])
@@ -47,8 +47,18 @@ def delete_row(objectID, instanceID):
     else:
         print("Row with given objectID and instanceID not found.")
 
-def read_table():
+import os
+import time
+
+def read_table(csv_file):
+    # Check if the file exists and has content
+    while not (os.path.isfile(csv_file) and os.path.getsize(csv_file) > 0):
+        print("Waiting for the file to be available and have content...")
+        time.sleep(1)  # Wait for 1 second before checking again
+    
+    # Read the CSV file into a DataFrame
     df = pd.read_csv(csv_file)
     return df
+
 
 
