@@ -1,0 +1,2 @@
+,id, timestamp, image_name, csv_name, seg_image_name, camera_name
+1,13:24:24,view1_frame_1_image_rendered,view1_frames_1_to_1.csv,view1_frame_1_image_segmented.png,camera1.csv
