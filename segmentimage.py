@@ -5,7 +5,7 @@ import cv2
 import random
 from data_repository.lookup_table import read_table
 
-ROOT = r"C:/Programming/Fourth Semester/PointVIS/PointVIS"
+ROOT = "C:/Programming/Fourth Semester/PointVIS/PointVIS"
 IMAGE_PATH = ""
 TEXT_FILE_PATH = ""
 OUTPUT_PATH = ""
@@ -18,7 +18,7 @@ model = YOLO("projection/yolov8n-seg.pt")
 def update_path(image_name):
     global IMAGE_PATH, TEXT_FILE_PATH, OUTPUT_PATH
     IMAGE_PATH = ROOT + "/assets/room1/" + image_name
-    TEXT_FILE_PATH = (ROOT + "/" + image_name).split(".")[0] + ".txt"
+    TEXT_FILE_PATH = (ROOT + "/runs/segment/predict/labels/" + image_name).split(".")[0] + ".txt"
     OUTPUT_PATH = ROOT + "/assets/room1/" + image_name
 
 def get_image_size(IMAGE_PATH):
@@ -28,16 +28,18 @@ def get_image_size(IMAGE_PATH):
     print(f"Width: {IMAGE_WIDTH}, Height: {IMAGE_HEIGHT}")
 
 def parse_segmentation_file(file_path):
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
-
     segmentation_data = []
-    for line in lines:
-        parts = line.strip().split()
-        class_id = int(parts[0])
-        coords = list(map(float, parts[1:]))
-        segmentation_data.append((class_id, coords))
-    
+
+    try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+        for line in lines:
+            parts = line.strip().split()
+            class_id = int(parts[0])
+            coords = list(map(float, parts[1:]))
+            segmentation_data.append((class_id, coords))
+    except FileNotFoundError:
+        print("No Objects Found!")
     return segmentation_data
 
 def normalize_to_pixel(coords, width, height):
@@ -60,9 +62,9 @@ def draw_segmentations(segmentation_data, width, height):
 
     object_count_dict = dict()
 
-    df = read_table()
+    df = read_table(ROOT + "/data_repository/lookup_table.csv")
 
-    objectID = len(df[['objectID']].unique())
+    objectID = len(df['objectID'].unique())
 
     for row in range(len(df)):
         record = df.iloc[row]
@@ -87,8 +89,8 @@ def draw_segmentations(segmentation_data, width, height):
             color_map[color] = (class_id, object_count_dict[objectID]+1, model.names[class_id])
             object_count_dict[objectID]+=1
         else:
-            color_map[color] = (class_id, object_count_dict[objectID]+1, model.names[class_id])
-            object_count_dict[objectID]+=1 
+            color_map[color] = (class_id, 1, model.names[class_id])
+            object_count_dict[objectID]=1 
         cv2.fillPoly(blank_image, [pts], color=color)
 
 
